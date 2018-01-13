@@ -1,2 +1,2 @@
 # testing-php-fpm
-TRafis build to test php-fpm on alpine
+Travis test for php-fpm on alpine
