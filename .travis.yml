@@ -1,0 +1,27 @@
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+before_install:
+  - sudo apt update && sudo apt install curl libfcgi0ldbl -y
+  - docker build -t php:7.2-fpm-alpine .
+
+script:
+# Starting container
+ - TEST_CONTAINER_ID=$(docker run -d -p 127.0.0.1:30000:9000 php:7.2-fpm-alpine)
+
+# Injecting test file
+ - docker exec $TEST_CONTAINER_ID /bin/sh -c "echo '<?php phpinfo(); ?>' > /var/www/html/test.php"
+
+# Testing
+ - SCRIPT_NAME=/test.php
+ - SCRIPT_FILENAME=/test.php
+ - REQUEST_METHOD=GET
+ - cgi-fcgi -bind -connect 127.0.0.1:30000
+
+# Cleaning
+ - docker exec $TEST_CONTAINER_ID /bin/sh -c "rm /var/www/html/test.php"
+
