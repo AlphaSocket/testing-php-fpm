@@ -7,7 +7,7 @@ services:
 
 before_install:
   - sudo apt update && sudo apt install curl libfcgi0ldbl -y
-  - docker build -t php:7.2-fpm-alpine .
+  - docker pull php:7.2-fpm-alpine
 
 script:
 # Starting container
